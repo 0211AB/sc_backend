@@ -34,3 +34,31 @@ exports.getAllQuotation = async (req, res) => {
         res.status(404).json({ e, message: 'Error In Fetching Quotations' });
     }
 };
+
+exports.getQuotationById = async (req, res) => {
+    try {
+        const { id } = req.params
+        const quotation = await Quotation.findById(id)
+
+        res.status(200).json(quotation);
+    } catch (e) {
+        console.log(e);
+        res.status(404).json({ e, message: 'Could Not Fetch Quotations' });
+    }
+};
+
+exports.updateQuotation = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const prevQuotation = await Quotation.findById(id);
+        if (!prevQuotation)
+            return res.status(404).json({ message: 'Quotation with given ID not found' })
+        const updatedq = await Quotation.findByIdAndUpdate(id, req.body, { new: true })
+        return res.status(200).json({ quotation: updatedq, message: 'Quotation Updated Sucessfully' })
+
+    } catch (e) {
+        console.log(e)
+        res.status(404).json({ e, message: "Error updating Quotation" });
+    }
+}
