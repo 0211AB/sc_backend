@@ -6,9 +6,9 @@ exports.createCompany = async (req, res) => {
     try {
         var company = req.body
         const companyexists = await Company.find({ name: company.name });
-        if (companyexists)
+        if (companyexists.length > 0)
             return res.status(404).json({ message: 'Client with given name already exists!!' })
-        
+
         var cmpny = new Company(company);
         await cmpny.save();
         res.status(201).json({ message: "Client Created Sucessfully !!" });
